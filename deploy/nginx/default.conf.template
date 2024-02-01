@@ -1,0 +1,44 @@
+server {
+    charset utf-8;
+    
+    listen       80;
+    listen  [::]:80;
+    server_name ${SERVER_NAME};
+
+    root ${APP_PUBLIC_PATH};
+    index index.php;
+
+    error_log  /var/log/nginx/error.log;
+    access_log /var/log/nginx/access.log;
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    location /assets/ {
+        try_files $uri $uri/ =404;
+    }
+
+    location = /favicon.ico {
+        try_files $uri =404;
+    }
+
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+    location = /404.html {
+        root   /usr/share/nginx/html;
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+
+        root           ${APP_PUBLIC_PATH};
+        fastcgi_pass   ${APP_CONTAINER_NAME}:${APP_PORT};
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include        fastcgi_params;
+    }
+}
