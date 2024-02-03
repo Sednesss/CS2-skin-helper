@@ -1,0 +1,5 @@
+DROP DATABASE IF EXISTS `main`;
+
+CREATE DATABASE main;
+
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%'
