@@ -12,8 +12,8 @@
         <div class="info-box">
             <span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-users"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">Количество пользователей</span>
-                <span class="info-box-number">{{ $lotsCount }}</span>
+                <span class="info-box-text">Количество предметов</span>
+                <span class="info-box-number">{{ $gameItemsCount }}</span>
             </div>
         </div>
     </div>
@@ -21,8 +21,8 @@
         <div class="info-box mb-3">
             <span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-book"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">Количество заявок</span>
-                <span class="info-box-number">{{ $lotsCount }}</span>
+                <span class="info-box-text">Добавлено скинов</span>
+                <span class="info-box-number">{{ $skinsCount }}</span>
             </div>
         </div>
     </div>
@@ -31,8 +31,8 @@
         <div class="info-box mb-3">
             <span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-shopping-cart"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">Выполненные заявки</span>
-                <span class="info-box-number">760</span>
+                <span class="info-box-text">---</span>
+                <span class="info-box-number">999</span>
             </div>
         </div>
     </div>
@@ -40,8 +40,8 @@
         <div class="info-box mb-3">
             <span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-users"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text">Количество УК</span>
-                <span class="info-box-number">2,000</span>
+                <span class="info-box-text">---</span>
+                <span class="info-box-number">1999</span>
             </div>
         </div>
     </div>

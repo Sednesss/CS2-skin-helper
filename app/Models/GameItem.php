@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Lot extends Model
+class GameItem extends Model
 {
     use HasFactory;
 
     public $timestamps = true;
 
-    protected $table = 'lots';
+    protected $table = 'game_items';
 
     protected $fillable = [
         'title',
@@ -22,6 +22,6 @@ class Lot extends Model
 
     public function skins(): HasMany
     {
-        return $this->hasMany(Skin::class, 'lot_id');
+        return $this->hasMany(Skin::class, 'game_item_id');
     }
 }

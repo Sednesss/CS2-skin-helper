@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('skins', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('lot_id');
-            $table->foreign('lot_id')->references('id')->on('lots')->onDelete('cascade');
+            $table->unsignedBigInteger('game_item_id');
+            $table->foreign('game_item_id')->references('id')->on('game_items')->onDelete('cascade');
             $table->string('description');
             $table->integer('pattern')->unsigned()->unique();
             $table->tinyInteger('float')->unsigned()->nullable(false)->default(0);

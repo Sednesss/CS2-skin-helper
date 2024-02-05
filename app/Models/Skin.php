@@ -15,7 +15,7 @@ class Skin extends Model
     protected $table = 'skins';
 
     protected $fillable = [
-        'lot_id',
+        'game_item_id',
         'description',
         'pattern',
         'float',
@@ -23,6 +23,6 @@ class Skin extends Model
 
     public function lot(): BelongsTo
     {
-        return $this->belongsTo(Lot::class, 'lot_id');
+        return $this->belongsTo(GameItem::class, 'game_item_id');
     }
 }
