@@ -11,6 +11,11 @@ rebuild:
 	docker exec cs2_skin_helper_app php artisan key:generate
 	# docker exec cs2_skin_helper_app php artisan migrate
 
+cache:
+	docker exec -it cs2_skin_helper_app php artisan cache:clear
+	docker exec -it cs2_skin_helper_app php artisan config:clear
+	docker exec -it cs2_skin_helper_app php artisan route:clear
+
 laravel:
 	docker exec -it cs2_skin_helper_app bash
 
