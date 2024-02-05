@@ -21,3 +21,7 @@ Route::middleware([])->prefix('admin-panel')->as('admin_panel::')->group(functio
     Route::get('/', [App\Http\Controllers\AdminPanel\DashboardController::class, 'index'])->name('dashboard');
 });
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
