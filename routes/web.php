@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::middleware([])->prefix('admin-panel')->as('admin_panel::')->group(function () {
+    Route::get('/', [App\Http\Controllers\AdminPanel\DashboardController::class, 'index'])->name('dashboard');
+});
+
