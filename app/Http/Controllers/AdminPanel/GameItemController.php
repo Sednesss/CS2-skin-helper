@@ -3,101 +3,80 @@
 namespace App\Http\Controllers\AdminPanel;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminPanel\GameItem\StoreRequest;
+use App\Http\Requests\AdminPanel\GameItem\UpdateRequest;
 use App\Models\GameItem;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class GameItemController extends Controller
 {
     public function index(): View
     {
-        $gameItems = GameItem::withCount('skins')->paginate(7);
+        $itemsPerPage = 8;
+        $gameItems = GameItem::withCount('skins')->paginate($itemsPerPage);
+        $totalPages = $gameItems->lastPage();
+        $currentPage = $gameItems->currentPage();
+
+        $totalItems = $gameItems->total();
+        $startItemNumber = $totalItems !== 0 ? $itemsPerPage * ($currentPage - 1) + 1: 0;
+        $endItemNumber = min($startItemNumber + $itemsPerPage - 1, $totalItems);
+
         return view('admin_panel.game_items.index', [
             'gameItems' => $gameItems,
+            'totalPages' => $totalPages,
+            'currentPage' => $currentPage,
+            'totalItems' => $totalItems,
+            'startItemNumber' => $startItemNumber,
+            'endItemNumber' => $endItemNumber,
         ]);
     }
 
-    // public function create(ManagementCompany $managementCompany = null)
-    // {
-    //     $user = Auth::user();
-    //     $user->role = $user->getRoleName();
+    public function create(): View
+    {
+        return view('admin_panel.game_items.create', []);
+    }
 
-    //     if ($user->role != User::ADMIN && $user->isAdminUK()) {
-    //         $user->role = User::ADMIN_UK;
-    //     }
+    public function store(StoreRequest $request): RedirectResponse
+    {
+        $gameItem = GameItem::create([
+            'title' => $request->title,
+            'description' => $request->description,
+        ]);
 
-    //     return view('admin_panel.users.create', [
-    //         'user' => $user,
-    //         'management_company' => $managementCompany
-    //     ]);
-    // }
+        return redirect()->route('admin_panel::game_items::show', $gameItem->id);
+    }
 
-    // public function store(StoreRequest $request): RedirectResponse
-    // {
-    //     $authUser = Auth::user();
+    public function show(GameItem $gameItem): View
+    {
+        $gameItem = $gameItem->load('skins');
+        
+        return view('admin_panel.game_items.show', [
+            'gameItem' => $gameItem,
+        ]);
+    }
 
-    //     $user = User::create([
-    //         'name' => $request->name,
-    //         'surname' => $request->surname,
-    //         'email' => $request->email,
-    //         'password' => bcrypt($request->password)
-    //     ]);
+    public function edit(GameItem $gameItem): View
+    {
+        return view('admin_panel.game_items.edit', [
+            'gameItem' => $gameItem,
+        ]);
+    }
 
-    //     if ($request->user_type == "customer") {
-    //         $user->phone = $request->phone;
-    //         $user->save();
+    public function update(UpdateRequest $request, GameItem $gameItem): RedirectResponse
+    {
+        $gameItem->title = $request->title;
+        $gameItem->description = $request->description;
+        $gameItem->save();
 
-    //         $address = Address::find($request->address);
-    //         $customer = Customer::create([
-    //             'user_id' => $user->id
-    //         ]);
-    //         $customer->addresses()->attach($address);
-    //         $user->changeRole(User::CUSTOMER);
-    //     } elseif ($request->user_type == "performer") {
-    //         $user->phone = $request->phone;
-    //         $user->save();
+        return redirect()->route('admin_panel::game_items::show', $gameItem->id);
+    }
 
-    //         $performer = $user->performer;
-    //         if (!$performer) {
-    //             $performer = Performer::create([
-    //                 'user_id' => $user->id,
-    //                 'management_company_id' => $request->management_company_id,
-    //             ]);
-    //         }
-    //         $user->changeRole(User::PERFORMER);
-    //     } elseif ($request->user_type == "administrator_mangement_company") {
-    //         $ukAdminPermissionTitle = ManagementCompany::find($request->management_company_id)
-    //             ->getPermissionTitleForAdminManagementCompany();
+    public function destroy(GameItem $gameItem): RedirectResponse
+    {
+        $gameItem->delete();
 
-    //         $user->givePermissionTo($ukAdminPermissionTitle);
-    //     } elseif ($request->user_type == "duty") {
-    //         $user->changeRole(User::ADMIN);
-    //     } elseif ($request->user_type == "administrator") {
-    //         $user->changeRole(User::OWNER);
-    //     }
-
-    //     if ($authUser->getRoleName() == User::OWNER) {
-    //         return redirect()->route('admin::users::index', $request->management_company_id);
-    //     }
-    //     return redirect()->route('admin::management_companies::show::admin', $request->management_company_id);
-    // }
-
-    // public function show(User $user): View
-    // {
-    //     return view('admin_panel.users.show', [
-    //         'user' => $user,
-    //         'canEdit' => $user->id == Auth::user()->id
-    //     ]);
-    // }
-
-    // public function destroy(DeleteRequest $request): RedirectResponse
-    // {
-    //     $address = Address::find($request->address_id);
-
-    //     if(count($address->childrens) == 0){
-    //         $address->delete();
-    //     }
-
-    //     return redirect()->route('admin::addresses::index');
-    // }
+        return redirect()->route('admin_panel::game_items::index');
+    }
 }

@@ -14,57 +14,51 @@
         </div>
 
         <div class="card-body">
-            <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
+            <div class="dataTables_wrapper dt-bootstrap4">
                 <div class="row">
                     <div class="col-sm-12">
-                        <table id="example2" class="table table-bordered table-hover dataTable dtr-inline" aria-describedby="example2_info">
+                        <table class="table table-bordered table-hover dataTable dtr-inline">
                             <thead>
                                 <tr>
-                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Rendering engine: activate to sort column ascending">Название</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">Количество скинов</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="">---</th>
-                                    <th class="sorting sorting_desc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" aria-sort="descending" style="">---</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="">---</th>
+                                    <th class="sorting" rowspan="1" colspan="1">№</th>
+                                    <th class="sorting" rowspan="1" colspan="1">ID</th>
+                                    <th class="sorting" rowspan="1" colspan="1">Название</th>
+                                    <th class="sorting" rowspan="1" colspan="1">Количество скинов</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($gameItems as $gameItem)
+                                @foreach($gameItems as $gameItemIndex => $gameItem)
                                 <tr class="odd">
-                                    <td class="dtr-control" tabindex="0">{{ $gameItem->title }}</td>
+                                    <td class="">{{ $gameItemIndex + 1 }}</td>
+                                    <td class="">{{ $gameItem->id }}</td>
+                                    <td class="">
+                                        <a href="{{ route('admin_panel::game_items::show', $gameItem->id) }}">{{ $gameItem->title }}</a>
+                                    </td>
                                     <td class="">{{ $gameItem->skins_count }}</td>
-                                    <td class="" style="">---</td>
-                                    <td class="sorting_1" style="">---</td>
-                                    <td class="" style="">---</td>
                                 </tr>
                                 @endforeach
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th rowspan="1" colspan="1">Rendering engine</th>
-                                    <th rowspan="1" colspan="1">Browser</th>
-                                    <th rowspan="1" colspan="1" style="">Platform(s)</th>
-                                    <th rowspan="1" colspan="1" style="">Engine version</th>
-                                    <th rowspan="1" colspan="1" style="">CSS grade</th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-5">
-                        <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div>
+                        <div class="dataTables_info">Showing {{ $startItemNumber }} to {{ $endItemNumber }} of {{ $totalItems }} entries</div>
                     </div>
                     <div class="col-sm-12 col-md-7">
-                        <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+                        <div class="dataTables_paginate paging_simple_numbers">
                             <ul class="pagination">
-                                <li class="paginate_button page-item previous disabled" id="example2_previous"><a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
-                                <li class="paginate_button page-item active"><a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
-                                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">2</a></li>
-                                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0" class="page-link">3</a></li>
-                                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0" class="page-link">4</a></li>
-                                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0" class="page-link">5</a></li>
-                                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">6</a></li>
-                                <li class="paginate_button page-item next" id="example2_next"><a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li>
+                                <li class="paginate_button page-item previous @if($currentPage == 1) disabled @endif">
+                                    <a href="{{route('admin_panel::game_items::index', ['page' => $currentPage - 1]) }}" tabindex="0" class="page-link">Previous</a>
+                                </li>
+                                @foreach(range(1, $totalPages) as $i)
+                                <li class="paginate_button page-item @if($i == $currentPage) active @endif">
+                                    <a href="{{route('admin_panel::game_items::index', ['page' => $i]) }}" tabindex="0" class="page-link">{{ $i }}</a>
+                                </li>
+                                @endforeach
+                                <li class="paginate_button page-item next @if($currentPage >= $totalPages) disabled @endif">
+                                    <a href="{{route('admin_panel::game_items::index', ['page' => $currentPage + 1]) }}" tabindex="0" class="page-link">Next</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -74,11 +68,14 @@
 
     </div>
     <div class="col-12 col-sm-6 col-md-3">
-        <div class="info-box mb-3">
-            <span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-users"></i></span>
-            <div class="info-box-content">
-                <span class="info-box-text">---</span>
-                <span class="info-box-number">1999</span>
+        <div class="info-box mb-3 pt-0">
+            <div class="col">
+                <div class="card-header mb-3">
+                    <h3 class="card-title">Действия</h3>
+                </div>
+                <button type="button" class="btn btn-block btn-secondary">Добавить</button>
+                <button type="button" class="btn btn-block btn-secondary">Отменить выделение</button>
+                <button type="button" class="btn btn-block btn-secondary">Удалить выделенные</button>
             </div>
         </div>
     </div>

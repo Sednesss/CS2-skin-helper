@@ -27,6 +27,8 @@ Route::middleware([])->prefix('admin-panel')->as('admin_panel::')->group(functio
         Route::get('/create', 'create')->name('create');
         Route::post('/', 'store')->name('store');
         Route::get('/{gameItem}', 'show')->name('show');
+        Route::get('/{gameItem}/edit', 'edit')->name('edit');
+        Route::post('/{gameItem}', 'update')->name('update');
         Route::delete('/{gameItem}', 'destroy')->name('destroy');
     });
     
