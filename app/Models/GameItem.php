@@ -11,6 +11,9 @@ class GameItem extends Model
 {
     use HasFactory, SoftDeletes;
 
+    const STATUS_ACTIVE = 0;
+    const STATUS_INACTIVE = 1;
+    
     public $timestamps = true;
 
     protected $table = 'game_items';

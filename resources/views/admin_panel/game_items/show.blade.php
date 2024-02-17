@@ -15,6 +15,7 @@
 
 @section('css')
 <link rel="stylesheet" href="/css/admin_panel/game_items/show.css" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @stop
 
 @section('content')
@@ -34,7 +35,7 @@
 
                 <div class="form-group" id="game_item-status">
                     <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input" id="status" name="status">
+                        <input type="checkbox" class="custom-control-input" id="status" name="status" @if($gameItem->status == 1) checked @endif>
                         <label class="custom-control-label" for="status">Статус активности</label>
                     </div>
                 </div>
@@ -90,40 +91,34 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
-                        <table id="example2" class="table table-bordered table-hover dataTable dtr-inline" aria-describedby="example2_info">
+                        <table class="table table-bordered table-hover dataTable dtr-inline border-0">
                             <thead>
                                 <tr>
-                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Rendering engine: activate to sort column ascending">#</th>
-                                    <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">Паттерн</th>
-                                    <th class="sorting sorting_desc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" aria-sort="descending" style="">Флоат</th>
+                                    <th class="col-1">№</th>
+                                    <th class="col-1">ID</th>
+                                    <th class="col-3">Паттерн</th>
+                                    <th class="col-4">Флоат</th>
+                                    <th class="col-2 border-0"></th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($gameItem->skins as $skinIndex => $skin)
                                 <tr class="odd">
-                                    <td class="dtr-control" tabindex="0">123</td>
-                                    <td class="">123</td>
-                                    <td class="" style="">---</td>
+                                    <td class="col-1">{{ $skinIndex + 1 }}</td>
+                                    <td class="col-1">{{ $skin->id }}</td>
+                                    <td class="col-3">{{ $skin->pattern }}</td>
+                                    <td class="col-4">{{ $skin->float }}</td>
+                                    <td class="col-2 border-0">
+                                        <button class="btn btn-transparent btn-icon">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-transparent btn-icon">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </td>
+                                    <!-- <a href="{{ route('admin_panel::game_items::show', $gameItem->id) }}">{{ $gameItem->title }}</a> -->
                                 </tr>
-                                <tr class="odd">
-                                    <td class="dtr-control" tabindex="0">123</td>
-                                    <td class="">123</td>
-                                    <td class="" style="">---</td>
-                                </tr>
-                                <tr class="odd">
-                                    <td class="dtr-control" tabindex="0">123</td>
-                                    <td class="">123</td>
-                                    <td class="" style="">---</td>
-                                </tr>
-                                <tr class="odd">
-                                    <td class="dtr-control" tabindex="0">123</td>
-                                    <td class="">123</td>
-                                    <td class="" style="">---</td>
-                                </tr>
-                                <tr class="odd">
-                                    <td class="dtr-control" tabindex="0">123</td>
-                                    <td class="">123</td>
-                                    <td class="" style="">---</td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

@@ -1,18 +1,25 @@
 $(document).ready(function () {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     let gameItemForm = $('#game_item-form');
     let statusGroup = gameItemForm.find('#game_item-status');
     let statusInput = statusGroup.find('#status');
     statusInput.change(function () {
         let statusValue = $(this).is(':checked') ? 1 : 0;
         $.ajax({
-            url: '/',
+            url: '/api/v1/game-items/test',
             type: 'POST',
-            data: { status: statusValue },
+            data: {
+                game_item_id: gameItem.id,
+                status: statusValue
+            },
             success: function (response) {
-                // Обработка успешного ответа
             },
             error: function () {
-                // Обработка ошибки
             }
         });
     });

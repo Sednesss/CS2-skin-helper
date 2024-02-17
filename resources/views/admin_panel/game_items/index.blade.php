@@ -20,21 +20,21 @@
                         <table class="table table-bordered table-hover dataTable dtr-inline">
                             <thead>
                                 <tr>
-                                    <th class="sorting" rowspan="1" colspan="1">№</th>
-                                    <th class="sorting" rowspan="1" colspan="1">ID</th>
-                                    <th class="sorting" rowspan="1" colspan="1">Название</th>
-                                    <th class="sorting" rowspan="1" colspan="1">Количество скинов</th>
+                                    <th class="col-1">№</th>
+                                    <th class="col-1">ID</th>
+                                    <th class="col-7">Название</th>
+                                    <th class="col-3">Количество скинов</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($gameItems as $gameItemIndex => $gameItem)
                                 <tr class="odd">
-                                    <td class="">{{ $gameItemIndex + 1 }}</td>
-                                    <td class="">{{ $gameItem->id }}</td>
-                                    <td class="">
+                                    <td class="col-1">{{ $startItemNumber + $gameItemIndex }}</td>
+                                    <td class="col-1">{{ $gameItem->id }}</td>
+                                    <td class="col-7">
                                         <a href="{{ route('admin_panel::game_items::show', $gameItem->id) }}">{{ $gameItem->title }}</a>
                                     </td>
-                                    <td class="">{{ $gameItem->skins_count }}</td>
+                                    <td class="col-3">{{ $gameItem->skins_count }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -65,7 +65,6 @@
                 </div>
             </div>
         </div>
-
     </div>
     <div class="col-12 col-sm-6 col-md-3">
         <div class="info-box mb-3 pt-0">
