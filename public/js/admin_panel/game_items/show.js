@@ -1,3 +1,5 @@
+let statusChangePath = '/api/v1/game-items/statusChange';
+
 $(document).ready(function () {
     $.ajaxSetup({
         headers: {
@@ -11,7 +13,7 @@ $(document).ready(function () {
     statusInput.change(function () {
         let statusValue = $(this).is(':checked') ? 1 : 0;
         $.ajax({
-            url: '/api/v1/game-items/test',
+            url: statusChangePath,
             type: 'POST',
             data: {
                 game_item_id: gameItem.id,

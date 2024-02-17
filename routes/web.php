@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,11 +36,3 @@ Route::middleware([])->prefix('admin-panel')->as('admin_panel::')->group(functio
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// api test
-Route::middleware([])->prefix('api')->as('api::')->group(function () {
-    Route::middleware([])->prefix('v1')->as('v1::')->group(function () {
-        Route::controller(App\Http\Controllers\API\GameItemController::class)->prefix('game-items')->as('game_items::')->group(function () {
-            Route::post('/test', 'statusChange')->name('test');
-        });
-    });
-});

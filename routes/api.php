@@ -14,6 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['auth:api'])->prefix('v1')->as('v1::')->group(function () {
+    Route::get('/test', function (Request $request) {
+        return [
+            'user' => $request->user()
+        ];
+    })->name('test');
+
+    Route::controller(App\Http\Controllers\API\GameItemController::class)->prefix('game-items')->as('game_items::')->group(function () {
+        Route::post('/statusChange', 'statusChange')->name('statusChange');
+    });
 });
