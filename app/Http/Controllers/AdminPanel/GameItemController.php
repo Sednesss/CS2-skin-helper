@@ -8,8 +8,6 @@ use App\Http\Requests\AdminPanel\GameItem\UpdateRequest;
 use App\Models\GameItem;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-
 class GameItemController extends Controller
 {
     public function index(): View
@@ -51,9 +49,21 @@ class GameItemController extends Controller
     public function show(GameItem $gameItem): View
     {
         $gameItem = $gameItem->load('skins');
+
+        $skinsItemsPerPage = 7;
+        $skinsTotalItems = $gameItem->skins->count();
+        $skinsStartItemNumber = $skinsTotalItems !== 0 ? 1: 0;
+        $skinsEndItemNumber = min($skinsStartItemNumber + $skinsItemsPerPage - 1, $skinsTotalItems);
+        $skinsTotalPages = ceil($skinsTotalItems / $skinsItemsPerPage);
         
         return view('admin_panel.game_items.show', [
             'gameItem' => $gameItem,
+            'skinsTotalPages' => $skinsTotalPages,
+            'skinsCurrentPage' => 1,
+            'skinsItemsPerPage' => $skinsItemsPerPage,
+            'skinsTotalItems' => $skinsTotalItems,
+            'skinsStartItemNumber' => $skinsStartItemNumber,
+            'skinsEndItemNumber' => $skinsEndItemNumber,
         ]);
     }
 

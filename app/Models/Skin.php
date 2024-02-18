@@ -21,7 +21,7 @@ class Skin extends Model
         'float',
     ];
 
-    public function lot(): BelongsTo
+    public function gameItem(): BelongsTo
     {
         return $this->belongsTo(GameItem::class, 'game_item_id');
     }

@@ -24,4 +24,9 @@ Route::middleware(['auth:api'])->prefix('v1')->as('v1::')->group(function () {
     Route::controller(App\Http\Controllers\API\GameItemController::class)->prefix('game-items')->as('game_items::')->group(function () {
         Route::post('/statusChange', 'statusChange')->name('statusChange');
     });
+
+    Route::controller(App\Http\Controllers\API\SkinController::class)->prefix('skins')->as('skins::')->group(function () {
+        Route::post('/pagination', 'pagination')->name('pagination');
+        Route::post('/destroy', 'destroy')->name('destroy');
+    });
 });

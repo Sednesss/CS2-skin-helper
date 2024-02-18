@@ -89,59 +89,72 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+
+                @if($skinsTotalPages != 0)
+                <div class="row" id="game_item_skins-data">
                     <div class="col-sm-12 col-md-12">
-                        <table class="table table-bordered table-hover dataTable dtr-inline border-0">
+                        <table class="table table-bordered table-hover dataTable dtr-inline border-0" id="game_item_skins-table">
                             <thead>
                                 <tr>
-                                    <th class="col-1">№</th>
-                                    <th class="col-1">ID</th>
-                                    <th class="col-3">Паттерн</th>
-                                    <th class="col-4">Флоат</th>
-                                    <th class="col-2 border-0"></th>
+                                    <th class="col-1 align-middle py-1">№</th>
+                                    <th class="col-1 align-middle py-1">ID</th>
+                                    <th class="col-4 align-middle py-1">Паттерн</th>
+                                    <th class="col-4 align-middle py-1">Флоат</th>
+                                    <th class="col-2 align-middle py-1 border-0"></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach($gameItem->skins as $skinIndex => $skin)
+                            <tbody id="game_item_skins-table_body">
+                                @foreach($gameItem->skins->take($skinsItemsPerPage) as $skinIndex => $skin)
                                 <tr class="odd">
-                                    <td class="col-1">{{ $skinIndex + 1 }}</td>
-                                    <td class="col-1">{{ $skin->id }}</td>
-                                    <td class="col-3">{{ $skin->pattern }}</td>
-                                    <td class="col-4">{{ $skin->float }}</td>
-                                    <td class="col-2 border-0">
-                                        <button class="btn btn-transparent btn-icon">
+                                    <td class="col-1 align-middle py-1">{{ $skinIndex + 1 }}</td>
+                                    <td class="col-1 align-middle py-1">{{ $skin->id }}</td>
+                                    <td class="col-4 align-middle py-1 text-nowrap">{{ $skin->pattern }}</td>
+                                    <td class="col-4 align-middle py-1 text-nowrap">{{ $skin->float }}</td>
+                                    <td class="col-2 align-middle py-1 text-center">
+                                        <button class="btn btn-transparent btn-icon game_item_skins-button_edit">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button class="btn btn-transparent btn-icon">
+                                        <button class="btn btn-transparent btn-icon game_item_skins-button_delete">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </td>
-                                    <!-- <a href="{{ route('admin_panel::game_items::show', $gameItem->id) }}">{{ $gameItem->title }}</a> -->
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" id="game_item_skins-page_map">
                     <div class="col-sm-12 col-md-5">
-                        <div class="dataTables_info" id="example2_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div>
+                        <div class="dataTables_info">Showing {{ $skinsStartItemNumber }} to {{ $skinsEndItemNumber }} of {{ $skinsTotalItems }} entries</div>
                     </div>
                     <div class="col-sm-12 col-md-7">
-                        <div class="dataTables_paginate paging_simple_numbers" id="example2_paginate">
+                        <div class="dataTables_paginate paging_simple_numbers">
                             <ul class="pagination">
-                                <li class="paginate_button page-item previous disabled" id="example2_previous"><a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li>
-                                <li class="paginate_button page-item active"><a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">1</a></li>
-                                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">2</a></li>
-                                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0" class="page-link">3</a></li>
-                                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0" class="page-link">4</a></li>
-                                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0" class="page-link">5</a></li>
-                                <li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">6</a></li>
-                                <li class="paginate_button page-item next" id="example2_next"><a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li>
+                                <li class="paginate_button page-item previous disabled">
+                                    <button class="page-link" type="button" data-page-number="1">Previous</button>
+                                </li>
+                                @foreach(range(1, $skinsTotalPages) as $i)
+                                <li class="paginate_button page-item @if($i == $skinsCurrentPage) active @endif">
+                                    <button class="page-link" type="button" data-page-number="{{ $i }}">{{ $i }}</button>
+                                </li>
+                                @endforeach
+                                <li class="paginate_button page-item next @if($skinsCurrentPage >= $skinsTotalPages) disabled @endif">
+                                    <button class="page-link" type="button" data-page-number="2">Next</button>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 </div>
+                @else
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 text-center">
+                        <div class="bg-light p-3 rounded p-3 border border-secondary">
+                            <span class="text-muted text-lg">Нет добавленных скинов</span>
+                        </div>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
     </div>

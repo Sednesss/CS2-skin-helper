@@ -22,7 +22,8 @@
                                 <tr>
                                     <th class="col-1">№</th>
                                     <th class="col-1">ID</th>
-                                    <th class="col-7">Название</th>
+                                    <th class="col-6">Название</th>
+                                    <th class="col-1">Статус</th>
                                     <th class="col-3">Количество скинов</th>
                                 </tr>
                             </thead>
@@ -31,8 +32,15 @@
                                 <tr class="odd">
                                     <td class="col-1">{{ $startItemNumber + $gameItemIndex }}</td>
                                     <td class="col-1">{{ $gameItem->id }}</td>
-                                    <td class="col-7">
+                                    <td class="col-6">
                                         <a href="{{ route('admin_panel::game_items::show', $gameItem->id) }}">{{ $gameItem->title }}</a>
+                                    </td>
+                                    <td class="col-1">
+                                        @if($gameItem->status == '1')
+                                        Активн
+                                        @elseif($gameItem->status == '0')
+                                        Неактивен
+                                        @endif
                                     </td>
                                     <td class="col-3">{{ $gameItem->skins_count }}</td>
                                 </tr>
@@ -73,8 +81,6 @@
                     <h3 class="card-title">Действия</h3>
                 </div>
                 <button type="button" class="btn btn-block btn-secondary">Добавить</button>
-                <button type="button" class="btn btn-block btn-secondary">Отменить выделение</button>
-                <button type="button" class="btn btn-block btn-secondary">Удалить выделенные</button>
             </div>
         </div>
     </div>
