@@ -111,10 +111,10 @@
                                     <td class="col-4 align-middle py-1 text-nowrap">{{ $skin->pattern }}</td>
                                     <td class="col-4 align-middle py-1 text-nowrap">{{ $skin->float }}</td>
                                     <td class="col-2 align-middle py-1 text-center">
-                                        <button class="btn btn-transparent btn-icon game_item_skins-button_edit">
+                                        <button class="btn btn-transparent btn-icon game_item_skins-button_edit" data-skin-id="{{ $skin->id }}">
                                             <i class="fas fa-edit"></i>
                                         </button>
-                                        <button class="btn btn-transparent btn-icon game_item_skins-button_delete">
+                                        <button class="btn btn-transparent btn-icon game_item_skins-button_delete" data-skin-id="{{ $skin->id }}">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </td>

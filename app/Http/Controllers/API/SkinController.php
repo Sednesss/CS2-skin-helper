@@ -35,6 +35,7 @@ class SkinController extends Controller
                     'totalItems' => $totalItems,
                     'startItemNumber' => $startItemNumber,
                     'endItemNumber' => $endItemNumber,
+                    'itemsPerPage' => $itemsPerPage,
                 ]
             ], 200);
         } catch (\Throwable $th) {

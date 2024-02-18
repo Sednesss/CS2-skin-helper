@@ -1,5 +1,6 @@
 let statusChangePath = '/api/v1/game-items/statusChange';
 let skinsPaginationPath = '/api/v1/skins/pagination';
+let skinsDestroyPath = '/api/v1/skins/destroy';
 
 $(document).ready(function () {
     $.ajaxSetup({
@@ -55,33 +56,56 @@ $(document).ready(function () {
     let gameItemSkinsPageTableInfo = gameItemSkinsPageMap.find('.dataTables_info');
     let gameItemSkinsPagePaginationButtons = gameItemSkinsPageMap.find('.dataTables_paginate .pagination .paginate_button');
 
+    let skinsPainationData = null;
     let currentPageNumber = 1;
     gameItemSkinsPagePaginationButtons.find('button').on('click', function (e) {
-        let SelectedPageNumber = $(this).attr('data-page-number');
+        let selectedPageNumber = $(this).attr('data-page-number');
+
+        updateSkinsTable(selectedPageNumber);
+    });
+
+    addHandlerSkinDeleteButtons();
+
+    //
+    // helper functions
+    //
+
+    // update skins table
+    function updateSkinsTable(page, isHasBlankPage = false) {
+        if (isHasBlankPage) {
+            deleteSkinPaginationLastPage();
+        }
 
         $.ajax({
             type: 'POST',
             url: skinsPaginationPath,
             data: {
                 game_item_id: gameItem.id,
-                page: SelectedPageNumber
+                page: page
             },
             success: function (response) {
-                currentPageNumber = SelectedPageNumber;
+                currentPageNumber = page;
+                skinsPainationData = {
+                    totalPage: response.data.totalPages,
+                    totalItems: response.data.totalItems,
+                    startItem: response.data.startItemNumber,
+                    endItem: response.data.endItemNumber,
+                    itemsPerPage: response.data.itemsPerPage
+                };
                 gameItemSkinsTableBody.empty();
 
                 // table
                 response.data.skins.forEach(function (skin, index) {
                     gameItemSkinsTableBody.append(`<tr class="odd">
-                        <td class="col-1 align-middle py-1">${index + 1}</td>
+                        <td class="col-1 align-middle py-1">${index + response.data.startItemNumber}</td>
                         <td class="col-1 align-middle py-1">${skin.id}</td>
                         <td class="col-4 align-middle py-1 text-nowrap">${skin.pattern}</td>
                         <td class="col-4 align-middle py-1 text-nowrap">${skin.float}</td>
                         <td class="col-2 align-middle py-1 text-center">
-                            <button class="btn btn-transparent btn-icon game_item_skins-button_edit">
+                            <button class="btn btn-transparent btn-icon game_item_skins-button_edit" data-skin-id="${skin.id}">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button class="btn btn-transparent btn-icon game_item_skins-button_delete">
+                            <button class="btn btn-transparent btn-icon game_item_skins-button_delete" data-skin-id="${skin.id}">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </td>
@@ -122,12 +146,59 @@ $(document).ready(function () {
                     gameItemSkinsPagePaginationButtonNext.removeClass('disabled');
                 }
 
-
-
-
-                // let nextButton = gameItemSkinsPagePaginationButtons.filter('.next');
-
+                addHandlerSkinDeleteButtons();
             }
         });
-    });
+    }
+
+    // add handler to skins delete buttons
+    function addHandlerSkinDeleteButtons() {
+        let gameItemSkinsDeleteButtons = gameItemSkinsTableBody.find('.game_item_skins-button_delete');
+        gameItemSkinsDeleteButtons.on('click', skinDeleteButtonHandler);
+    }
+
+    // skin delete button handler
+    function skinDeleteButtonHandler() {
+        let skinId = $(this).attr('data-skin-id');
+
+        $.ajax({
+            type: 'POST',
+            url: skinsDestroyPath,
+            data: {
+                skin_id: skinId,
+            },
+            success: function (response) {
+                let isHasBlankPage = false;
+                let showPageNumber = currentPageNumber;
+
+                if (skinsPainationData !== null && typeof skinsPainationData === 'object') {
+                    // if a blank page appears when deleting
+                    if (Math.ceil((skinsPainationData.totalItems - 1) / skinsPainationData.itemsPerPage) < skinsPainationData.totalPage) {
+                        isHasBlankPage = true;
+                    }
+
+                    // if the last page is open & if there are no elements on the current page 
+                    if (
+                        isHasBlankPage
+                        && skinsPainationData.totalPage == currentPageNumber
+                        && skinsPainationData.startItem == skinsPainationData.totalItems
+                    ) {
+                        showPageNumber = currentPageNumber - 1;
+                    }
+                }
+
+                updateSkinsTable(showPageNumber, isHasBlankPage);
+            }
+        });
+    }
+
+    // delete skin pagination last page
+    function deleteSkinPaginationLastPage() {
+        $('#game_item_skins')
+            .find('#game_item_skins-page_map .dataTables_paginate .pagination .paginate_button')
+            .not('.previous')
+            .not('.next')
+            .last()
+            .remove();
+    }
 });
