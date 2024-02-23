@@ -26,7 +26,7 @@ class PaginationRequest extends FormRequest
         return [
             'game_item_id' => [
                 'required',
-                'string',
+                'integer',
                 'exists:App\Models\GameItem,id',
             ],
             'page' => [

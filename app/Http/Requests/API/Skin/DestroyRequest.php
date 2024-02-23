@@ -26,7 +26,7 @@ class DestroyRequest extends FormRequest
         return [
             'skin_id' => [
                 'required',
-                'string',
+                'integer',
                 'exists:App\Models\Skin,id',
             ],
         ];

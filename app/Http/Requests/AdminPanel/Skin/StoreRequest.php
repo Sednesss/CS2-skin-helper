@@ -25,7 +25,7 @@ class StoreRequest extends FormRequest
         return [
             'game_item_id' => [
                 'required',
-                'string',
+                'integer',
                 'exists:App\Models\GameItem,id',
             ],
             'description' => [
@@ -34,21 +34,14 @@ class StoreRequest extends FormRequest
             ],
             'pattern' => [
                 'required',
-                'string',
-                function ($attribute, $value, $fail) {
-                    if (!preg_match('/^\d{1,3}$/', $value)) {
-                        $fail($attribute.' must be an integer between 1 and 999.');
-                    }
-                },
+                'integer',
+                'between:1,999',
+                'unique:App\Models\GameItem,pattern',
             ],
             'float' => [
                 'required',
-                'string',
-                function ($attribute, $value, $fail) {
-                    if (!preg_match('/^0*\.0*[1-9]\d*$|^0*\.0*[1-9]$|^0*\.0*[1-9]\d{2}$|^1\.0*$|^1$/', $value)) {
-                        $fail($attribute.' must be a floating point number between 0 and 1.');
-                    }
-                },
+                'numeric',
+                'between:0,1',
             ],
         ];
     }
