@@ -32,6 +32,11 @@ Route::middleware([])->prefix('admin-panel')->as('admin_panel::')->group(functio
         Route::post('/{gameItem}', 'update')->name('update');
         Route::delete('/{gameItem}', 'destroy')->name('destroy');
     });
+
+    Route::controller(App\Http\Controllers\AdminPanel\SkinController::class)->prefix('skins')->as('skins::')->group(function () {
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+    });
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -68,10 +68,10 @@
                 <div class="row mb-2" id="game_item_skins-actions">
                     <div class="col-sm-12 col-md-12">
                         <div class="dt-buttons btn-group flex-wrap">
-                            <button class="btn btn-secondary" tabindex="0" type="button">
+                            <a class="btn btn-secondary" href="{{ route('admin_panel::skins::create', ['game_item' => $gameItem->id]) }}">
                                 <i class="fas fa-plus"></i>
                                 <span>Добавить</span>
-                            </button>
+                            </a>
                             <button class="btn btn-secondary" tabindex="0" type="button">
                                 <i class="fas fa-arrow-down"></i>
                                 <span>Экспорт в Excel</span>

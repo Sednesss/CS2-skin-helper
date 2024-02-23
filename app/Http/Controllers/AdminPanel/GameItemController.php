@@ -8,6 +8,7 @@ use App\Http\Requests\AdminPanel\GameItem\UpdateRequest;
 use App\Models\GameItem;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+
 class GameItemController extends Controller
 {
     public function index(): View
