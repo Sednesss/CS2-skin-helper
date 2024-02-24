@@ -23,11 +23,11 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(125);
 
-        Gate::define('isOwner', function($user) {
+        Gate::define('isOwner', function ($user) {
             return $user->isOwner();
         });
 
-        Gate::define('isBasic', function($user) {
+        Gate::define('isBasic', function ($user) {
             return $user->isBasic();
         });
     }

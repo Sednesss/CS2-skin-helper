@@ -106,16 +106,22 @@
                             <tbody id="game_item_skins-table_body">
                                 @foreach($gameItem->skins->take($skinsItemsPerPage) as $skinIndex => $skin)
                                 <tr class="odd">
-                                    <td class="col-1 align-middle py-1">{{ $skinIndex + 1 }}</td>
-                                    <td class="col-1 align-middle py-1">{{ $skin->id }}</td>
-                                    <td class="col-4 align-middle py-1 text-nowrap">{{ $skin->pattern }}</td>
-                                    <td class="col-4 align-middle py-1 text-nowrap">{{ $skin->float }}</td>
-                                    <td class="col-2 align-middle py-1 text-center">
+                                    <td class="col-1 align-middle py-1 skin_element-index">{{ $skinIndex + 1 }}</td>
+                                    <td class="col-1 align-middle py-1 skin_element-id">{{ $skin->id }}</td>
+                                    <td class="col-4 align-middle py-1 text-nowrap skin_element-pattern">{{ $skin->pattern }}</td>
+                                    <td class="col-4 align-middle py-1 text-nowrap skin_element-float">{{ $skin->float }}</td>
+                                    <td class="col-2 align-middle py-1 text-center skin_element-actions">
                                         <button class="btn btn-transparent btn-icon game_item_skins-button_edit" data-skin-id="{{ $skin->id }}">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button class="btn btn-transparent btn-icon game_item_skins-button_delete" data-skin-id="{{ $skin->id }}">
                                             <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <button class="btn btn-transparent btn-icon disabled d-none game_item_skins-button_save" data-skin-id="{{ $skin->id }}">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                        <button class="btn btn-transparent btn-icon disabled d-none game_item_skins-button_cancel" data-skin-id="{{ $skin->id }}">
+                                            <i class="fas fa-times"></i>
                                         </button>
                                     </td>
                                 </tr>

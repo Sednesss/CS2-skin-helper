@@ -1,6 +1,7 @@
 let statusChangePath = '/api/v1/game-items/statusChange';
 let skinsPaginationPath = '/api/v1/skins/pagination';
 let skinsDestroyPath = '/api/v1/skins/destroy';
+let skinsUpdatePath = '/api/v1/skins/update';
 
 $(document).ready(function () {
     $.ajaxSetup({
@@ -58,13 +59,14 @@ $(document).ready(function () {
 
     let skinsPainationData = null;
     let currentPageNumber = 1;
+    let skinsCancellationValue = {};
     gameItemSkinsPagePaginationButtons.find('button').on('click', function (e) {
         let selectedPageNumber = $(this).attr('data-page-number');
 
         updateSkinsTable(selectedPageNumber);
     });
 
-    addHandlerSkinDeleteButtons();
+    addHandlerSkinActions();
 
     //
     // helper functions
@@ -97,16 +99,22 @@ $(document).ready(function () {
                 // table
                 response.data.skins.forEach(function (skin, index) {
                     gameItemSkinsTableBody.append(`<tr class="odd">
-                        <td class="col-1 align-middle py-1">${index + response.data.startItemNumber}</td>
-                        <td class="col-1 align-middle py-1">${skin.id}</td>
-                        <td class="col-4 align-middle py-1 text-nowrap">${skin.pattern}</td>
-                        <td class="col-4 align-middle py-1 text-nowrap">${skin.float}</td>
-                        <td class="col-2 align-middle py-1 text-center">
+                        <td class="col-1 align-middle py-1 skin_element-index">${index + response.data.startItemNumber}</td>
+                        <td class="col-1 align-middle py-1 skin_element-id">${skin.id}</td>
+                        <td class="col-4 align-middle py-1 text-nowrap skin_element-pattern">${skin.pattern}</td>
+                        <td class="col-4 align-middle py-1 text-nowrap skin_element-float">${skin.float}</td>
+                        <td class="col-2 align-middle py-1 text-center skin_element-actions">
                             <button class="btn btn-transparent btn-icon game_item_skins-button_edit" data-skin-id="${skin.id}">
                                 <i class="fas fa-edit"></i>
                             </button>
                             <button class="btn btn-transparent btn-icon game_item_skins-button_delete" data-skin-id="${skin.id}">
                                 <i class="fas fa-trash-alt"></i>
+                            </button>
+                            <button class="btn btn-transparent btn-icon disabled d-none game_item_skins-button_save" data-skin-id="${skin.id}">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button class="btn btn-transparent btn-icon disabled d-none game_item_skins-button_cancel" data-skin-id="${skin.id}">
+                                <i class="fas fa-times"></i>
                             </button>
                         </td>
                     </tr>`);
@@ -146,16 +154,39 @@ $(document).ready(function () {
                     gameItemSkinsPagePaginationButtonNext.removeClass('disabled');
                 }
 
-                addHandlerSkinDeleteButtons();
+                addHandlerSkinActions();
             }
         });
     }
 
     // add handler to skins delete buttons
-    function addHandlerSkinDeleteButtons() {
+    function addHandlerSkinActions() {
         let gameItemSkinsDeleteButtons = gameItemSkinsTableBody.find('.game_item_skins-button_delete');
         gameItemSkinsDeleteButtons.on('click', skinDeleteButtonHandler);
+
+        let gameItemSkinsEditButtons = gameItemSkinsTableBody.find('.game_item_skins-button_edit');
+        gameItemSkinsEditButtons.on('click', skinEditButtonHandler);
+
+        let gameItemSkinsSaveButtons = gameItemSkinsTableBody.find('.game_item_skins-button_save');
+        gameItemSkinsSaveButtons.on('click', skinSaveButtonHandler);
+
+        let gameItemSkinsCancelButtons = gameItemSkinsTableBody.find('.game_item_skins-button_cancel');
+        gameItemSkinsCancelButtons.on('click', skinCancelButtonHandler);
     }
+
+    // delete skin pagination last page
+    function deleteSkinPaginationLastPage() {
+        $('#game_item_skins')
+            .find('#game_item_skins-page_map .dataTables_paginate .pagination .paginate_button')
+            .not('.previous')
+            .not('.next')
+            .last()
+            .remove();
+    }
+
+    //
+    // button handlers
+    //
 
     // skin delete button handler
     function skinDeleteButtonHandler() {
@@ -192,13 +223,96 @@ $(document).ready(function () {
         });
     }
 
-    // delete skin pagination last page
-    function deleteSkinPaginationLastPage() {
-        $('#game_item_skins')
-            .find('#game_item_skins-page_map .dataTables_paginate .pagination .paginate_button')
-            .not('.previous')
-            .not('.next')
-            .last()
-            .remove();
+    // skin edit button handler
+    function skinEditButtonHandler() {
+        let skinId = $(this).attr('data-skin-id');
+        let skinDataRow = $(this).closest('tr');
+        let skinActions = skinDataRow.find('.skin_element-actions');
+        let skinButtonEdit = skinActions.find('.game_item_skins-button_edit');
+        let skinButtonDelete = skinActions.find('.game_item_skins-button_delete');
+        let skinButtonSave = skinActions.find('.game_item_skins-button_save');
+        let skinButtonCancel = skinActions.find('.game_item_skins-button_cancel');
+
+        skinButtonEdit.addClass('disabled').addClass('d-none');
+        skinButtonDelete.addClass('disabled').addClass('d-none');
+        skinButtonSave.removeClass('disabled').removeClass('d-none');
+        skinButtonCancel.removeClass('disabled').removeClass('d-none');
+
+        let skinPattern = skinDataRow.find('.skin_element-pattern');
+        let skinFloat = skinDataRow.find('.skin_element-float');
+        let skinPatternValue = skinPattern.text();
+        let skinFloatValue = skinFloat.text();
+        skinsCancellationValue[skinId] = {
+            pattern: skinPatternValue,
+            float: skinFloatValue
+        };
+
+        skinPattern.empty();
+        skinFloat.empty();
+        skinPattern.append(`<input type="number" class="form-control" value="${skinPatternValue}" min="1" max="999">`);
+        skinFloat.append(`<input type="number" class="form-control" value="${skinFloatValue}" min="0" max="1" step="0.001">`);
+    }
+
+    // skin save button handler
+    function skinSaveButtonHandler() {
+        let skinId = $(this).attr('data-skin-id');
+        let skinDataRow = $(this).closest('tr');
+        let skinActions = skinDataRow.find('.skin_element-actions');
+        let skinButtonEdit = skinActions.find('.game_item_skins-button_edit');
+        let skinButtonDelete = skinActions.find('.game_item_skins-button_delete');
+        let skinButtonSave = skinActions.find('.game_item_skins-button_save');
+        let skinButtonCancel = skinActions.find('.game_item_skins-button_cancel');
+
+        let skinPattern = skinDataRow.find('.skin_element-pattern');
+        let skinFloat = skinDataRow.find('.skin_element-float');
+        let skinPatternValue = skinPattern.find('input').val();
+        let skinFloatValue = skinFloat.find('input').val();
+
+        $.ajax({
+            type: 'POST',
+            url: skinsUpdatePath,
+            data: {
+                skin_id: skinId,
+                pattern: skinPatternValue,
+                float: skinFloatValue
+            },
+            success: function (response) {
+                skinButtonEdit.removeClass('disabled').removeClass('d-none');
+                skinButtonDelete.removeClass('disabled').removeClass('d-none');
+                skinButtonSave.addClass('disabled').addClass('d-none');
+                skinButtonCancel.addClass('disabled').addClass('d-none');
+
+                skinPattern.empty();
+                skinFloat.empty();
+                skinPattern.text(skinPatternValue);
+                skinFloat.text(skinFloatValue);
+            }
+        });
+    }
+
+    // skin cancel button handler
+    function skinCancelButtonHandler() {
+        let skinId = $(this).attr('data-skin-id');
+        let skinDataRow = $(this).closest('tr');
+        let skinActions = skinDataRow.find('.skin_element-actions');
+        let skinButtonEdit = skinActions.find('.game_item_skins-button_edit');
+        let skinButtonDelete = skinActions.find('.game_item_skins-button_delete');
+        let skinButtonSave = skinActions.find('.game_item_skins-button_save');
+        let skinButtonCancel = skinActions.find('.game_item_skins-button_cancel');
+
+        skinButtonEdit.removeClass('disabled').removeClass('d-none');
+        skinButtonDelete.removeClass('disabled').removeClass('d-none');
+        skinButtonSave.addClass('disabled').addClass('d-none');
+        skinButtonCancel.addClass('disabled').addClass('d-none');
+
+        let skinPattern = skinDataRow.find('.skin_element-pattern');
+        let skinFloat = skinDataRow.find('.skin_element-float');
+        let skinPatternValue = skinsCancellationValue[skinId].pattern;
+        let skinFloatValue = skinsCancellationValue[skinId].float;
+
+        skinPattern.empty();
+        skinFloat.empty();
+        skinPattern.text(skinPatternValue);
+        skinFloat.text(skinFloatValue);
     }
 });

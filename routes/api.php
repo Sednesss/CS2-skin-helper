@@ -27,6 +27,7 @@ Route::middleware(['auth:api'])->prefix('v1')->as('v1::')->group(function () {
 
     Route::controller(App\Http\Controllers\API\SkinController::class)->prefix('skins')->as('skins::')->group(function () {
         Route::post('/pagination', 'pagination')->name('pagination');
+        Route::post('/update', 'update')->name('update');
         Route::post('/destroy', 'destroy')->name('destroy');
     });
 });

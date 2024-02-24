@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Skin\DestroyRequest;
 use App\Http\Requests\API\Skin\PaginationRequest;
+use App\Http\Requests\API\Skin\UpdateRequest;
 use App\Models\Skin;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -65,6 +66,28 @@ class SkinController extends Controller
 
             return response()->json([
                 'message' => 'Failed to skin removal',
+            ], 500);
+        }
+    }
+
+    public function update(UpdateRequest $request)
+    {
+        try {
+            $skin = Skin::find($request->skin_id);
+            $skin->pattern = $request->pattern;
+            $skin->float = $request->float;
+            $skin->save();
+
+            return response()->json([
+                'message' => 'Successful skin update',
+            ], 200);
+        } catch (\Throwable $th) {
+            $httpMethod = Route::current()->methods()[0];
+            $routeName = Route::currentRouteName();
+            Log::error("Error executing request: [$httpMethod] \"$routeName\": " . $th->getMessage());
+
+            return response()->json([
+                'message' => 'Failed to skin update',
             ], 500);
         }
     }

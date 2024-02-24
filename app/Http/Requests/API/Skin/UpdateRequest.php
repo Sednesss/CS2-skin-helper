@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests\AdminPanel\Skin;
+namespace App\Http\Requests\API\Skin;
 
+use App\Rules\OldPatternValueOrUniquePattern;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class StoreRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,20 +24,17 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'game_item_id' => [
+            'skin_id' => [
                 'required',
                 'integer',
-                'exists:App\Models\GameItem,id',
-            ],
-            'description' => [
-                'required',
-                'string',
+                'between:1,999',
+                'exists:App\Models\Skin,id',
             ],
             'pattern' => [
                 'required',
                 'integer',
                 'between:1,999',
-                'unique:App\Models\Skin,pattern',
+                new OldPatternValueOrUniquePattern
             ],
             'float' => [
                 'required',
