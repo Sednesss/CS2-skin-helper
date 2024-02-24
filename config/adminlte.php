@@ -107,7 +107,7 @@ return [
     */
 
     'preloader' => [
-        'enabled' => true,
+        'enabled' => false,
         'img' => [
             'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
             'alt' => 'AdminLTE Preloader Image',
@@ -256,9 +256,9 @@ return [
     'dashboard_url' => 'admin-panel',
     'logout_url' => 'logout',
     'login_url' => 'login',
-    'register_url' => 'register',
-    'password_reset_url' => 'password/reset',
-    'password_email_url' => 'password/email',
+    'register_url' => false,
+    'password_reset_url' => false,
+    'password_email_url' => false,
     'profile_url' => false,
 
     /*
@@ -298,6 +298,11 @@ return [
         [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
+        ],
+        [
+            'text' => 'Перейти на сайт',
+            'url'  => '/',
+            'icon' => 'fas fa-fw fa-globe',
         ],
         ['header' => 'ДАННЫЕ'],
 

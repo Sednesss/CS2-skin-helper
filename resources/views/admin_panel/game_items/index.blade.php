@@ -80,7 +80,7 @@
                 <div class="card-header mb-3">
                     <h3 class="card-title">Действия</h3>
                 </div>
-                <button type="button" class="btn btn-block btn-secondary">Добавить</button>
+                <a class="btn btn-block btn-secondary" href="{{ route('admin_panel::game_items::create') }}">Добавить</a>
             </div>
         </div>
     </div>
