@@ -304,7 +304,7 @@ return [
         [
             'text' => 'Игровые предметы',
             'icon' => 'nav-icon fas fa-solid fa-cube',
-            // 'can' => 'isOwner',
+            'can' => 'isUserOwner',
             'submenu' => [
                 [
                     'text' => 'Список',

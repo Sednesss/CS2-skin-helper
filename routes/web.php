@@ -20,7 +20,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::middleware([])->prefix('admin-panel')->as('admin_panel::')->group(function () {
+Route::middleware(['auth', 'user.role.owner'])->prefix('admin-panel')->as('admin_panel::')->group(function () {
     Route::get('/', [App\Http\Controllers\AdminPanel\DashboardController::class, 'index'])->name('dashboard');
 
     Route::controller(App\Http\Controllers\AdminPanel\GameItemController::class)->prefix('game-items')->as('game_items::')->group(function () {
