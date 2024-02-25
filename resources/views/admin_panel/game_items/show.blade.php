@@ -72,7 +72,7 @@
                                 <i class="fas fa-plus"></i>
                                 <span>Добавить</span>
                             </a>
-                            <a class="btn btn-secondary" tabindex="0" href="{{ route('admin_panel::skins::export') }}">
+                            <a class="btn btn-secondary" tabindex="0" href="{{ route('admin_panel::skins::export', ['game_item' => $gameItem->id]) }}">
                                 <i class="fas fa-arrow-down"></i>
                                 <span>Экспорт в Excel</span>
                             </a>

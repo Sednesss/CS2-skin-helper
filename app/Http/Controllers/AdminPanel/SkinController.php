@@ -48,9 +48,13 @@ class SkinController extends Controller
         return redirect()->route('admin_panel::game_items::show', $request->game_item_id);
     }
 
-    public function export()
+    public function export(Request $request)
     {
+        $gameItemId = $request->query('game_item');
+
+        $skins = Skin::where('game_item_id', $gameItemId)->get();
+
         $fileName = 'import_skins_' . time() . '.xlsx';
-        return Excel::download(new SkinExport, $fileName);
+        return Excel::download(new SkinExport($skins), $fileName);
     }
 }
