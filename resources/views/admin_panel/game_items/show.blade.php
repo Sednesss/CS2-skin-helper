@@ -72,10 +72,10 @@
                                 <i class="fas fa-plus"></i>
                                 <span>Добавить</span>
                             </a>
-                            <button class="btn btn-secondary" tabindex="0" type="button">
+                            <a class="btn btn-secondary" tabindex="0" href="{{ route('admin_panel::skins::export') }}">
                                 <i class="fas fa-arrow-down"></i>
                                 <span>Экспорт в Excel</span>
-                            </button>
+                            </a>
                             <div class="btn-group" id="game_item_skins-import">
                                 <button class="btn btn-secondary dropdown-toggle" id="game_item_skins-button_import_menu" tabindex="0" type="button">
                                     <i class="fas fa-arrow-up"></i>

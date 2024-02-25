@@ -36,6 +36,8 @@ Route::middleware(['auth', 'user.role.owner'])->prefix('admin-panel')->as('admin
     Route::controller(App\Http\Controllers\AdminPanel\SkinController::class)->prefix('skins')->as('skins::')->group(function () {
         Route::get('/create', 'create')->name('create');
         Route::post('/', 'store')->name('store');
+
+        Route::get('/export', 'export')->name('export');
     });
 });
 
