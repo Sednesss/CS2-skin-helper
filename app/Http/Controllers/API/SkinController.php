@@ -11,6 +11,7 @@ use App\Imports\SkinImport;
 use App\Models\Skin;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SkinController extends Controller
@@ -99,7 +100,21 @@ class SkinController extends Controller
     {
         try {
 
-            Excel::import(new SkinImport($request->game_item_id), 'test.xlsx');
+            if ($request->type == 'rewrite') {
+                Skin::where('game_item_id', $request->game_item_id)->delete();
+            }
+
+            $file = $request->file('file');
+            $OriginalfileName = $file->getClientOriginalName();
+            $OriginalfileExtension = pathinfo($OriginalfileName, PATHINFO_EXTENSION);
+
+            $fileName = md5(uniqid() . time()) . '.' . $OriginalfileExtension;
+            $filePath = 'skins/import/' . $fileName;
+            Storage::disk('local')->put($filePath, file_get_contents($file));
+
+            Excel::import(new SkinImport($request->game_item_id), $filePath);
+
+            Storage::disk('local')->delete($filePath);
             
             return response()->json([
                 'message' => 'Successful import of skins',

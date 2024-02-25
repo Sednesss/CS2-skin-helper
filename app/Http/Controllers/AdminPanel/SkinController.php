@@ -54,7 +54,7 @@ class SkinController extends Controller
 
         $skins = Skin::where('game_item_id', $gameItemId)->get();
 
-        $fileName = 'import_skins_' . time() . '.xlsx';
+        $fileName = 'export_skins_' . time() . '.xlsx';
         return Excel::download(new SkinExport($skins), $fileName);
     }
 }
