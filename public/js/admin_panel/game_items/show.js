@@ -1,4 +1,5 @@
 let statusChangePath = '/api/v1/game-items/statusChange';
+let skinsImportPath = '/api/v1/skins/import';
 let skinsPaginationPath = '/api/v1/skins/pagination';
 let skinsDestroyPath = '/api/v1/skins/destroy';
 let skinsUpdatePath = '/api/v1/skins/update';
@@ -15,21 +16,7 @@ $(document).ready(function () {
     let statusGroup = gameItemForm.find('#game_item-status');
     let statusInput = statusGroup.find('#status');
 
-    statusInput.change(function () {
-        let statusValue = $(this).is(':checked') ? 1 : 0;
-        $.ajax({
-            url: statusChangePath,
-            type: 'POST',
-            data: {
-                game_item_id: gameItem.id,
-                status: statusValue
-            },
-            success: function (response) {
-            },
-            error: function () {
-            }
-        });
-    });
+    statusInput.change(gameItemStatusHandler);
 
     // import menu
     let gameItemSkins = $('#game_item_skins');
@@ -37,6 +24,8 @@ $(document).ready(function () {
     let gameItemSkinsImport = gameItemSkinsActions.find('#game_item_skins-import');
     let gameItemSkinsButtonImport = gameItemSkinsImport.find('#game_item_skins-button_import_menu');
     let gameItemSkinsImportMenu = gameItemSkinsImport.find('#game_item_skins-import_menu');
+    let gameItemSkinsImportRewrite = gameItemSkinsImportMenu.find('#game_item_skins-import_rewrite');
+    let gameItemSkinsImportAddition = gameItemSkinsImportMenu.find('#game_item_skins-import_addition');
 
     gameItemSkinsButtonImport.on('click', function () {
         gameItemSkinsImportMenu.toggle();
@@ -47,6 +36,9 @@ $(document).ready(function () {
             gameItemSkinsImportMenu.hide();
         }
     });
+
+    gameItemSkinsImportRewrite.on('click', skinsImportRewriteHandler);
+    gameItemSkinsImportAddition.on('click', skinsImportAdditionHandler);
 
     // skins
     let gameItemSkinsData = gameItemSkins.find('#game_item_skins-data');
@@ -159,7 +151,7 @@ $(document).ready(function () {
         });
     }
 
-    // add handler to skins delete buttons
+    // add handler to skins elemets buttons
     function addHandlerSkinActions() {
         let gameItemSkinsDeleteButtons = gameItemSkinsTableBody.find('.game_item_skins-button_delete');
         gameItemSkinsDeleteButtons.on('click', skinDeleteButtonHandler);
@@ -184,9 +176,67 @@ $(document).ready(function () {
             .remove();
     }
 
+    // skins file import
+    function skinsImport(type) {
+        $('<input type="file">').change(function () {
+            let file = this.files[0];
+            if (file) {
+                let formData = new FormData();
+                formData.append('game_item_id', gameItem.id);
+                formData.append('type', type);
+                formData.append('file', file);
+
+                $.ajax({
+                    url: skinsImportPath,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function () {
+                    },
+                    success: function (response) {
+                        console.log(response);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr);
+                        console.log(status);
+                        console.log(error);
+                    }
+                });
+            }
+        }).click();
+    }
+
     //
     // button handlers
     //
+
+    // game item change status handler
+    function gameItemStatusHandler() {
+        let statusValue = $(this).is(':checked') ? 1 : 0;
+        $.ajax({
+            url: statusChangePath,
+            type: 'POST',
+            data: {
+                game_item_id: gameItem.id,
+                status: statusValue
+            },
+            success: function (response) {
+            },
+            error: function () {
+            }
+        });
+    }
+
+    // skins import rewrite handler
+    function skinsImportRewriteHandler() {
+        skinsImport('rewrite');
+    }
+
+    // skins import addition handler
+    function skinsImportAdditionHandler() {
+        skinsImport('addition');
+    }
 
     // skin delete button handler
     function skinDeleteButtonHandler() {

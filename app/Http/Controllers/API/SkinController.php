@@ -4,11 +4,14 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\Skin\DestroyRequest;
+use App\Http\Requests\API\Skin\ImportRequest;
 use App\Http\Requests\API\Skin\PaginationRequest;
 use App\Http\Requests\API\Skin\UpdateRequest;
+use App\Imports\SkinImport;
 use App\Models\Skin;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SkinController extends Controller
 {
@@ -88,6 +91,26 @@ class SkinController extends Controller
 
             return response()->json([
                 'message' => 'Failed to skin update',
+            ], 500);
+        }
+    }
+
+    public function import(ImportRequest $request)
+    {
+        try {
+
+            Excel::import(new SkinImport($request->game_item_id), 'test.xlsx');
+            
+            return response()->json([
+                'message' => 'Successful import of skins',
+            ], 200);
+        } catch (\Throwable $th) {
+            $httpMethod = Route::current()->methods()[0];
+            $routeName = Route::currentRouteName();
+            Log::error("Error executing request: [$httpMethod] \"$routeName\": " . $th->getMessage());
+
+            return response()->json([
+                'message' => 'Error importing skins',
             ], 500);
         }
     }

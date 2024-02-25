@@ -82,8 +82,8 @@
                                     <span>Импорт из Excel</span>
                                 </button>
                                 <div class="dropdown-menu" id="game_item_skins-import_menu">
-                                    <a class="dropdown-item" href="#">Полное обновление</a>
-                                    <a class="dropdown-item" href="#">Добавление новых</a>
+                                    <button class="dropdown-item" id="game_item_skins-import_rewrite" type="button">Полное обновление</button>
+                                    <button class="dropdown-item" id="game_item_skins-import_addition" type="button">Добавление новых</button>
                                 </div>
                             </div>
                         </div>
