@@ -41,7 +41,7 @@ class GameItemController extends Controller
     {
         $gameItem = GameItem::create([
             'title' => $request->title,
-            'description' => $request->description,
+            'description' => $request->description ?? null,
         ]);
 
         return redirect()->route('admin_panel::game_items::show', $gameItem->id);

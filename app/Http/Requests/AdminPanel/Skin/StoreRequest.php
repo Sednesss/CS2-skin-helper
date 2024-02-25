@@ -29,7 +29,7 @@ class StoreRequest extends FormRequest
                 'exists:App\Models\GameItem,id',
             ],
             'description' => [
-                'required',
+                'nullable',
                 'string',
             ],
             'pattern' => [

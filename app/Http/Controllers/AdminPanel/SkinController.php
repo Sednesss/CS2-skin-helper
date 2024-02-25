@@ -40,7 +40,7 @@ class SkinController extends Controller
     {
         $skin = Skin::create([
             'game_item_id' => $request->game_item_id,
-            'description' => $request->description,
+            'description' => $request->description ?? null,
             'pattern' => $request->pattern,
             'float' => $request->float,
         ]);

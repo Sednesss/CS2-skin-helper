@@ -28,7 +28,7 @@ class StoreRequest extends FormRequest
                 'string',
             ],
             'description' => [
-                'required',
+                'nullable',
                 'string',
             ],
         ];

@@ -6,7 +6,7 @@ use App\Models\Skin;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
+// use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class SkinExport implements FromCollection, WithHeadings, WithMapping
 {
@@ -24,8 +24,8 @@ class SkinExport implements FromCollection, WithHeadings, WithMapping
             'description',
             'pattern',
             'float',
-            'created_at',
-            'updated_at',
+            // 'created_at',
+            // 'updated_at',
         ];
     }
 
@@ -35,8 +35,8 @@ class SkinExport implements FromCollection, WithHeadings, WithMapping
             $invoice->description,
             $invoice->pattern,
             $invoice->float,
-            Date::dateTimeToExcel($invoice->created_at),
-            Date::dateTimeToExcel($invoice->updated_at),
+            // Date::dateTimeToExcel($invoice->created_at),
+            // Date::dateTimeToExcel($invoice->updated_at),
         ];
     }
 }

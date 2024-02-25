@@ -28,7 +28,7 @@ class UpdateRequest extends FormRequest
                 'string',
             ],
             'description' => [
-                'required',
+                'nullable',
                 'string',
             ],
         ];
