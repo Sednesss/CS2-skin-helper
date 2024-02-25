@@ -250,7 +250,7 @@ $(document).ready(function () {
         skinPattern.empty();
         skinFloat.empty();
         skinPattern.append(`<input type="number" class="form-control" value="${skinPatternValue}" min="1" max="999">`);
-        skinFloat.append(`<input type="number" class="form-control" value="${skinFloatValue}" min="0" max="1" step="0.001">`);
+        skinFloat.append(`<input type="number" class="form-control" value="${skinFloatValue}" min="0" max="1" step="0.000001">`);
     }
 
     // skin save button handler

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('game_item_id')->references('id')->on('game_items')->onDelete('cascade');
             $table->string('description');
             $table->integer('pattern')->unsigned()->unique();
-            $table->tinyInteger('float')->unsigned()->nullable(false)->default(0);
+            $table->float('float', 21, 20)->unsigned()->nullable(false)->default(0);
             $table->timestamps();
         });
     }

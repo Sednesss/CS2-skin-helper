@@ -6,16 +6,16 @@
 <h1 class="m-0 text-dark">Игровой предмет: <strong>{{ $gameItem->title }} (ID:{{ $gameItem->id }})</strong></h1>
 @stop
 
+@section('css')
+<link rel="stylesheet" href="/css/admin_panel/game_items/show.css" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@stop
+
 @section('js')
 <script src="/js/admin_panel/game_items/show.js"></script>
 <script>
     var gameItem = {!! $gameItem->toJson() !!};
 </script>
-@stop
-
-@section('css')
-<link rel="stylesheet" href="/css/admin_panel/game_items/show.css" />
-<meta name="csrf-token" content="{{ csrf_token() }}">
 @stop
 
 @section('content')

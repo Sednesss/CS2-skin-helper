@@ -45,7 +45,7 @@
 
                     <div class="form-group" id="newSkin_float">
                         <label for="float">Флоат</label>
-                        <input type="number" class="form-control" id="float" name="float" placeholder="Введите число с плавающей запятой от 0 до 1" min="0" max="1" step="0.001">
+                        <input type="number" class="form-control" id="float" name="float" placeholder="Введите число с плавающей запятой от 0 до 1" min="0" max="1" step="0.000001">
                     </div>
                 </div>
 

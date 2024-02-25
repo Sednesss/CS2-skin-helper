@@ -21,6 +21,10 @@ class Skin extends Model
         'float',
     ];
 
+    public static $rules = [
+        'float' => 'numeric|min:0|max:1',
+    ];
+
     public function gameItem(): BelongsTo
     {
         return $this->belongsTo(GameItem::class, 'game_item_id');
