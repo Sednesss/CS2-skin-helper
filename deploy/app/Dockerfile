@@ -19,7 +19,9 @@ RUN apt-get update && apt-get install -y \
     unzip \
     nano \
     libpq-dev \
-    bash
+    bash \
+    zlib1g-dev \
+    libzip-dev
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -28,7 +30,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-webp --with-jpeg
 RUN cd /usr/src/php/ext/gd && make
 RUN docker-php-ext-install -j$(nproc) gd
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath pgsql
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath pgsql zip
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
