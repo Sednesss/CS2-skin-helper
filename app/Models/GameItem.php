@@ -24,6 +24,15 @@ class GameItem extends Model
         'image_preview_path',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function ($gameItem) {
+            Skin::where('game_item_id', $gameItem->id)->delete();
+        });
+    }
+
     public function skins(): HasMany
     {
         return $this->hasMany(Skin::class, 'game_item_id');
