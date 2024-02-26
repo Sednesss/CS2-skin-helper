@@ -41,7 +41,7 @@ class TestDataSeeder extends Seeder
             'description' => 'Пистолет',
         ]);
 
-        foreach (range(1, 999) as $number) {
+        foreach (range(1, 50) as $number) {
             Skin::create([
                 'game_item_id' => $gameItem_1->id,
                 'description' => $faker->sentence,
