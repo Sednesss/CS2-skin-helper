@@ -3,7 +3,9 @@ server {
     
     listen       80;
     listen  [::]:80;
+    
     server_name ${SERVER_NAME};
+    client_max_body_size 20M;
 
     root ${APP_PUBLIC_PATH};
     index index.php;
