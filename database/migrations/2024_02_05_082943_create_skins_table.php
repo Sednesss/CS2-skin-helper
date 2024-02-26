@@ -16,9 +16,11 @@ return new class extends Migration
             $table->unsignedBigInteger('game_item_id');
             $table->foreign('game_item_id')->references('id')->on('game_items')->onDelete('cascade');
             $table->string('description')->nullable(true);
-            $table->integer('pattern')->unsigned()->unique();
-            $table->float('float', 21, 20)->unsigned()->nullable(false)->default(0);
+            $table->integer('pattern')->unsigned();
+            $table->float('float', 21, 20)->unsigned()->nullable(true)->default(0);
             $table->timestamps();
+
+            $table->unique(['game_item_id', 'pattern']);
         });
     }
 
