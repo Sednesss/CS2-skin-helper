@@ -165,4 +165,7 @@
         </div>
     </div>
 </div>
+
+<div id="page_alerts" class="toasts-top-right fixed">
+</div>
 @stop

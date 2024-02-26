@@ -125,7 +125,7 @@ class SkinController extends Controller
             Log::error("Error executing request: [$httpMethod] \"$routeName\": " . $th->getMessage());
 
             return response()->json([
-                'message' => 'Error importing skins',
+                'message' => 'Incorrect structure of the uploaded file, non-compliance with the rules regarding the uniqueness of the skin pattern for the current game item',
             ], 500);
         }
     }

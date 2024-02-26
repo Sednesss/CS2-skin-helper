@@ -60,6 +60,9 @@ $(document).ready(function () {
 
     addHandlerSkinActions();
 
+    // page alert
+    let pageAlerts = $('#page_alerts');
+
     //
     // helper functions
     //
@@ -195,16 +198,58 @@ $(document).ready(function () {
                     beforeSend: function () {
                     },
                     success: function (response) {
-                        console.log(response);
+                        location.reload();
                     },
-                    error: function (xhr, status, error) {
-                        console.log(xhr);
-                        console.log(status);
-                        console.log(error);
+                    error: function (response) {
+                        if (response.responseJSON.message) {
+                            addAlertError('Import error', 'Incorrect input', response.responseJSON.message);
+                        } else {
+                            addAlertError('Import error', '???', 'Unspecified server error');
+                        }
                     }
                 });
             }
         }).click();
+    }
+
+    // add error alert
+    function addAlertError(type, subtype, text) {
+        let strong = $('<strong>', {
+            text: type,
+            class: 'mr-auto'
+        });
+
+        let small = $('<small>', {
+            text: subtype,
+            class: 'ml-2'
+        });
+
+        let button = $('<button>', {
+            type: 'button',
+            class: 'ml-2 mb-1 close',
+            click: closeAlert
+        });
+
+        let toastHeader = $('<div>', {
+            class: 'toast-header'
+        });
+
+        let toastBody = $('<div>', {
+            text: text,
+            class: 'toast-body'
+        });
+
+        let toast = $('<div>', {
+            class: 'toast bg-danger fade show alert-element'
+        });
+
+        button.append('<span>×</span>');
+        toastHeader.append(strong);
+        toastHeader.append(small);
+        toastHeader.append(button);
+        toast.append(toastHeader);
+        toast.append(toastBody);
+        pageAlerts.append(toast);
     }
 
     //
@@ -336,6 +381,17 @@ $(document).ready(function () {
                 skinFloat.empty();
                 skinPattern.text(skinPatternValue);
                 skinFloat.text(skinFloatValue);
+            },
+            error: function (response) {
+                if (response.responseJSON.errors) {
+                    $.each(response.responseJSON.errors, function (key, error) {
+                        addAlertError('Update skin error', 'Incorrect input', error);
+                    });
+                } else if (response.responseJSON.message) {
+                    addAlertError('Update skin error', 'Incorrect input', response.message);
+                } else {
+                    addAlertError('Import error', '???', 'Unspecified server error');
+                }
             }
         });
     }
@@ -364,5 +420,12 @@ $(document).ready(function () {
         skinFloat.empty();
         skinPattern.text(skinPatternValue);
         skinFloat.text(skinFloatValue);
+    }
+
+    // close this alert
+    function closeAlert() {
+        $(this).closest('.alert-element').fadeOut('slow', function () {
+            $(this).remove();
+        });
     }
 });
