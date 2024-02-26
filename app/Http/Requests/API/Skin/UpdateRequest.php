@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\API\Skin;
 
-use App\Rules\OldPatternValueOrUniquePattern;
+use App\Rules\OldPatternValueOrUniquePatternForGameItem;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,7 +34,7 @@ class UpdateRequest extends FormRequest
                 'required',
                 'integer',
                 'between:1,999',
-                new OldPatternValueOrUniquePattern
+                new OldPatternValueOrUniquePatternForGameItem,
             ],
             'float' => [
                 'required',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\AdminPanel\Skin;
 
+use App\Rules\UniquePatternForGameItem;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,7 +37,7 @@ class StoreRequest extends FormRequest
                 'required',
                 'integer',
                 'between:1,999',
-                'unique:App\Models\Skin,pattern',
+                new UniquePatternForGameItem,
             ],
             'float' => [
                 'required',
