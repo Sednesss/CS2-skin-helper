@@ -6,6 +6,10 @@
 <h1 class="m-0 text-dark">Игровой предмет: <strong>{{ $gameItem->title }} (ID:{{ $gameItem->id }})</strong></h1>
 @stop
 
+@section('js')
+<script src="/js/admin_panel/game_items/edit.js"></script>
+@stop
+
 @section('css')
 <link rel="stylesheet" href="/css/admin_panel/game_items/edit.css" />
 @stop
@@ -38,5 +42,22 @@
             </form>
         </div>
     </div>
+</div>
+
+<div id="page_alerts" class="toasts-top-right fixed">
+    @if ($errors->any())
+    @foreach ($errors->all() as $error)
+    <div class="toast bg-danger fade show alert-error">
+        <div class="toast-header">
+            <strong class="mr-auto">Save error</strong>
+            <small class="ml-2">Incorrect input</small>
+            <button type="button" class="ml-2 mb-1 close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="toast-body">{{ $error }}</div>
+    </div>
+    @endforeach
+    @endif
 </div>
 @stop

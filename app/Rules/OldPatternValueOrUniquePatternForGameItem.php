@@ -35,7 +35,7 @@ class OldPatternValueOrUniquePatternForGameItem implements DataAwareRule, Valida
                 ->exists();
 
             if ($existingPatternSkins) {
-                $fail('The pattern must be unique or match the pattern of the selected skin.');
+                $fail('The pattern must be unique to the current game item or must match the pattern of the current skin.');
             }
         }
     }
